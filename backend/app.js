@@ -23,9 +23,12 @@ mongoose.connect('mongodb+srv://' + process.env.DB_USER_PASS + '@cluster0.oq7aw.
     next();
   });
 
+
+
 //To extract the json object from the request
 app.use(bodyParser.json());
 
+//Routes
 app.use('/api/auth', userRoutes);
 app.use('/api/sauces', sauceRoutes);
 

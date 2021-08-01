@@ -1,7 +1,6 @@
 const User = require('../models/userModel'); //Import user model
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-//const authToken = jwt.sign({ token: 'bar' });
 
 //signup
 
@@ -30,7 +29,7 @@ exports.login = (req, res, next) => {
           res.status(200).json({
             userId: user._id,
             //token: "TOKEN",
-            token: jwt.sign({ userId: user._id}, "SECRET_TOKEN", {expiresIn: '24h'})
+            token: jwt.sign({ userId: user._id }, "SECRET_TOKEN", { expiresIn: '24h' })
            /*  token: jwt.sign(
               { userId: user._id },
               'RANDOM_TOKEN_SECRET',
@@ -42,3 +41,16 @@ exports.login = (req, res, next) => {
     })
     .catch(error => res.status(500).json({message: "erreur 2"}))
 }
+
+/* function authentificateToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if(token == null) return res.sendStatus(401)
+
+  jwt.verify(token, "SECRET_TOKEN", (err, user) => {
+    if(err) return res.sendStatus(403) 
+    req.user = user 
+    next()
+  })
+} */
