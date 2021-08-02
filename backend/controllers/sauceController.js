@@ -1,6 +1,20 @@
 const Sauce = require('../models/sauceModel');
 
 exports.createSauce = (req, res, next) => {
+  const sauceObject = JSON.parse(req.body.sauce);
+  delete sauceObject._id;
+  const sauce = new Sauce ({
+    ...sauceObject,
+    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+
+    //req.protocol = http or https           req.get('host') => nom d'hôte          $req.file.filename = nom du fichier
+  });
+  sauce.save()
+    .then(() => res.status(201).json({ message: "Sauce créée"}))
+    .catch(error => res.status(400).json({ message: 'impossible de creer la sauce' }));
+} 
+
+/* exports.createSauce = (req, res, next) => {
   delete req.body._id;
   const sauce = new Sauce ({
     ...req.body
@@ -8,7 +22,7 @@ exports.createSauce = (req, res, next) => {
   sauce.save()
     .then(() => res.status(201).json({ message: "Sauce créée"}))
     .catch(error => res.status(400).json({ message: 'impossible de creer la sauce' }));
-}
+} */
 
  exports.updateSauce = (req, res, next) => {
   Sauce.updateOne({ _id: req.params.id }, { ...req.body, _id:req.params.id })

@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const path = require('path');
 require('dotenv').config({ path:'./config/.env'});
 
 //Routes
@@ -27,6 +28,8 @@ mongoose.connect('mongodb+srv://' + process.env.DB_USER_PASS + '@cluster0.oq7aw.
 
 //To extract the json object from the request
 app.use(bodyParser.json());
+
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 //Routes
 app.use('/api/auth', userRoutes);
