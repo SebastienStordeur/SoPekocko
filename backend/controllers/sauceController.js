@@ -1,5 +1,6 @@
 const Sauce = require('../models/sauceModel');
 const fs = require('fs');
+const sauceModel = require('../models/sauceModel');
 
 exports.createSauce = (req, res, next) => {
   const sauceObject = JSON.parse(req.body.sauce);
@@ -61,6 +62,30 @@ exports.displayOneSauce = (req, res, next) => {
     .catch(error => res.status(404).json(error));
 } 
 
-/* exports.like = (req,res,next) => {
-
-} */
+exports.like = async (req,res,next) => {
+  try {
+    await sauceModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        $addToSet: { userLiked: req.body.id }
+      },
+      { new: true },
+      (err, docs) => {
+        if (err) return res.status(400).send(err)
+      }
+    );
+    await userModel.findByIdAndUpdate(
+      req.body.id,
+      {
+        $addToSet: { likes: req.params.id }
+      },
+      { new: true },
+      (err, docs) => {
+        if(!err) res.send(docs);
+        else return res.status(400).send(err)
+      }
+    );
+  } catch (err) {
+    return
+  }
+} 
