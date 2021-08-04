@@ -13,7 +13,7 @@ exports.createSauce = (req, res, next) => {
     likes: 0,
     dislikes: 0,
     /*     usersLiked: [''],
-    usersDisliked: [''] */
+    usersDisliked: ['']  */
     //req.protocol = http or https           req.get('host') => nom d'hôte          $req.file.filename = nom du fichier
   });
   //Save Sauce
@@ -80,18 +80,20 @@ exports.displayOneSauce = (req, res, next) => {
     .catch((error) => res.status(404).json(error));
 };
 
-//Manage like and dislikes
+//Manage likes and dislikes
 exports.like = (req, res, next) => {
   switch (req.body.like) {
+    //Case where an user likes a sauce
     case 1:
       Sauce.updateOne(
         { _id: req.params.id },
-        { $push: { usersLiked: req.body.userId }, $inc: { likes: +1 } }
+        { $push: { usersLiked: req.body.userId }, $inc: { likes: +1 } } //push the userId in [usersliked] and like +1
       )
         .then(() => res.status(200).json({ message: "like envoyé" }))
         .catch((error) => res.status(400).json({ error }));
       break;
 
+    //Case where an user dislikes a sauce
     case -1:
       Sauce.updateOne(
         { _id: req.params.id },
@@ -103,6 +105,7 @@ exports.like = (req, res, next) => {
         .catch((error) => res.status(400).json({ error }));
       break;
 
+    //Case where the likes or dislikes already to be back to neutral
     case 0:
       Sauce.findOne({ _id: req.params.id }).then((sauce) => {
         if (sauce.usersLiked.includes(req.body.userId)) {
@@ -110,7 +113,7 @@ exports.like = (req, res, next) => {
             { _id: req.params.id },
             { $pull: { usersLiked: req.body.userId }, $inc: { likes: -1 } }
           )
-            .then(() => res.status(200).json({ message: 'Like supprimé' }))
+            .then(() => res.status(200).json({ message: "Like supprimé" }))
             .catch((error) => res.status(400).json({ error }));
         }
         if (sauce.usersDisliked.includes(req.body.userId)) {
@@ -121,7 +124,7 @@ exports.like = (req, res, next) => {
               $inc: { dislikes: -1 },
             }
           )
-            .then(() => res.status(200).json({ message: 'Dislike supprimé' }))
+            .then(() => res.status(200).json({ message: "Dislike supprimé" }))
             .catch((error) => res.status(400).json({ error }));
         }
       });
