@@ -30,11 +30,6 @@ exports.login = (req, res, next) => {
             userId: user._id,
             //token: "TOKEN",
             token: jwt.sign({ userId: user._id }, "SECRET_TOKEN", { expiresIn: '24h' })
-           /*  token: jwt.sign(
-              { userId: user._id },
-              'RANDOM_TOKEN_SECRET',
-              { expiresin: '24h' }
-            ) */
           });
         })
         .catch(error => res.status(500).json({ message:  "erreur1" }));

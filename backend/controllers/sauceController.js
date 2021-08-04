@@ -1,6 +1,6 @@
 const Sauce = require('../models/sauceModel');
 const fs = require('fs');
-const sauceModel = require('../models/sauceModel');
+const User = require('../models/userModel');
 
 exports.createSauce = (req, res, next) => {
   const sauceObject = JSON.parse(req.body.sauce);
@@ -8,23 +8,12 @@ exports.createSauce = (req, res, next) => {
   const sauce = new Sauce ({
     ...sauceObject,
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-
     //req.protocol = http or https           req.get('host') => nom d'hôte          $req.file.filename = nom du fichier
   });
   sauce.save()
     .then(() => res.status(201).json({ message: "Sauce créée"}))
     .catch(error => res.status(400).json({ message: 'impossible de creer la sauce' }));
 } 
-
-/* exports.createSauce = (req, res, next) => {
-  delete req.body._id;
-  const sauce = new Sauce ({
-    ...req.body
-  });
-  sauce.save()
-    .then(() => res.status(201).json({ message: "Sauce créée"}))
-    .catch(error => res.status(400).json({ message: 'impossible de creer la sauce' }));
-} */
 
 exports.updateSauce = (req, res, next) => {
   const sauceObject = req.file ? 
@@ -64,7 +53,7 @@ exports.displayOneSauce = (req, res, next) => {
 
 exports.like = async (req,res,next) => {
   try {
-    await sauceModel.findByIdAndUpdate(
+    await Sauce.findByIdAndUpdate(
       req.params.id,
       {
         $addToSet: { userLiked: req.body.id }
@@ -74,7 +63,7 @@ exports.like = async (req,res,next) => {
         if (err) return res.status(400).send(err)
       }
     );
-    await userModel.findByIdAndUpdate(
+    await User.findByIdAndUpdate(
       req.body.id,
       {
         $addToSet: { likes: req.params.id }
