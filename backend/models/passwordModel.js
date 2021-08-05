@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const PasswordValidator = require('password-validator');
 const pswSchema = new PasswordValidator;
 
