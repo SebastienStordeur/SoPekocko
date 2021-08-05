@@ -11,7 +11,7 @@ exports.createSauce = (req, res, next) => {
       req.file.filename
     }`, //Reconstruction de la source de l'image (ici dossier images)
     likes: 0,
-    dislikes: 0,
+    dislikes: 0,      //We had likes and dislikes to avoid a NaN answer on click
     //req.protocol = http or https           req.get('host') => nom d'hôte          $req.file.filename = nom du fichier
   });
   //Save Sauce
@@ -82,7 +82,7 @@ exports.displayOneSauce = (req, res, next) => {
 exports.like = (req, res, next) => {
   switch (req.body.like) {
     //Case where an user likes a sauce
-    case 1:
+    case +1:
       Sauce.updateOne(
         { _id: req.params.id },
         { $push: { usersLiked: req.body.userId }, $inc: { likes: +1 } } //push the userId in [usersliked] and like +1

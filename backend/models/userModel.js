@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const mongooseUniqueValidator = require('mongoose-unique-validator');
+const { isEmail } = require('validator');
+
 
 //Schema for each user
 const userSchema = new mongoose.Schema(
@@ -8,16 +10,15 @@ const userSchema = new mongoose.Schema(
     {
       type: String,
       required: true,
+      validate: [isEmail],
       lowercase: true,
-      trim: true,
+      trim: true,     //delete spaces
       unique: true,
     },
     password:
     {
       type: String, 
       required: true,
-      max: 1024,
-      minLength: 6
     },
   },
   {
