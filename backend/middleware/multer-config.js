@@ -1,5 +1,6 @@
 const multer = require('multer');
 
+//Convert images format to jpg or png
 const MIME_TYPES = {
   'image/jpg': 'jpg',
   'image/jpeg': 'jpg',
