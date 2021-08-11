@@ -11,7 +11,7 @@ exports.createSauce = (req, res, next) => {
       req.file.filename
     }`, //Reconstruction de la source de l'image (ici dossier images)
     likes: 0,
-    dislikes: 0,      //We had likes and dislikes to avoid a NaN answer on click
+    dislikes: 0, //We had likes and dislikes to avoid a NaN answer on click
     //req.protocol = http or https           req.get('host') => nom d'hôte          $req.file.filename = nom du fichier
   });
   //Save Sauce
