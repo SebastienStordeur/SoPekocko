@@ -2,14 +2,17 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const path = require("path");
+
 require("dotenv").config({ path: "./config/.env" });
+const helmet = require('helmet');
+
 
 //Routes
 const userRoutes = require("./routes/userRoutes");
 const sauceRoutes = require("./routes/sauceRoutes");
 
 const app = express();
-
+app.use(helmet());  
 //Database
 mongoose
   .connect(process.env.DB_ACCESS, {
@@ -18,6 +21,7 @@ mongoose
   })
   .then(() => console.log("Connexion à MongoDB réussie !"))
   .catch(() => console.log("Connexion à MongoDB échouée !"));
+
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*"); //Access the API from any origin
@@ -31,6 +35,8 @@ app.use((req, res, next) => {
   ); //Methods allowed
   next();
 });
+
+app.use(express.json());
 
 //To extract the json object from the request
 app.use(bodyParser.json());
